@@ -1,0 +1,55 @@
+# Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.so.*
+*.dylib
+*.test
+*.out
+
+# Go
+/bin/
+/vendor/
+go.sum
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+*.iml
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Logs
+storage/logs/*.log
+*.log
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Cache
+storage/cache/*
+.cache
+
+# Temporary files
+tmp/
+temp/
+
+# Build output
+dist/
+build/
+app
+govel
+
+# OS
+.DS_Store
+Thumbs.db
