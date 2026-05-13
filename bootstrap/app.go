@@ -1,8 +1,8 @@
 package bootstrap
-package bootstrap
 
 import (
 	"fmt"
+	stdhttp "net/http"
 
 	"github.com/hasnat/govel/framework/console"
 	"github.com/hasnat/govel/framework/container"
@@ -136,5 +136,5 @@ func (app *Application) Run(port string) error {
 	addr := ":" + port
 	app.Logger().Info("Starting server on http://localhost:" + port)
 
-	return nil // Would return http.ListenAndServe(addr, app.Router())
+	return stdhttp.ListenAndServe(addr, app.Router())
 }

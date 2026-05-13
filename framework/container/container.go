@@ -1,5 +1,4 @@
 package container
-package container
 
 import (
 	"errors"
@@ -10,19 +9,18 @@ import (
 
 // Container manages application bindings and dependency resolution.
 type Container struct {
-	bindings   map[string]*binding
-	instances  map[string]interface{}
-	mu         sync.RWMutex
-	providers  []ServiceProvider
-	booted     bool
+	bindings  map[string]*binding
+	instances map[string]interface{}
+	mu        sync.RWMutex
+	providers []ServiceProvider
+	booted    bool
 }
 
 // binding represents a service binding configuration.
 type binding struct {
-	abstract   string
-	concrete   interface{}
-	singleton  bool
-	instance   interface{}
+	abstract  string
+	concrete  interface{}
+	singleton bool
 }
 
 // ServiceProvider defines the interface for service providers.

@@ -1,4 +1,3 @@
-package queue
 // Queue system (Phase 3)
 // Background job processing with multiple drivers
 
@@ -13,19 +12,19 @@ import (
 type Job interface {
 	// Unique identifier for the job
 	ID() string
-	
+
 	// Job name/type
 	Name() string
-	
+
 	// Job payload
 	Payload() map[string]interface{}
-	
+
 	// Handle the job
 	Handle(ctx context.Context) error
-	
+
 	// Failed job handling
 	Failed(err error) error
-	
+
 	// Job timeout
 	Timeout() time.Duration
 }
@@ -34,16 +33,16 @@ type Job interface {
 type Queue interface {
 	// Push a job onto the queue
 	Push(ctx context.Context, job Job) error
-	
+
 	// Push a job with delay
 	PushLater(ctx context.Context, job Job, delay time.Duration) error
-	
+
 	// Process jobs from the queue
 	Process(ctx context.Context, maxJobs int) error
-	
+
 	// Get queue stats
 	Count(ctx context.Context) (int64, error)
-	
+
 	// Clear the queue
 	Clear(ctx context.Context) error
 }

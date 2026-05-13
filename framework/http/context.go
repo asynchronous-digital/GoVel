@@ -18,7 +18,7 @@ func NewHandler(h ContextHandler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ctx := New(w, r)
 		if err := h(ctx); err != nil {
-			ctx.ServerError("Internal Server Error")
+			_ = ctx.ServerError("Internal Server Error")
 		}
 	})
 }
@@ -203,13 +203,17 @@ func (c *Context) Container() interface{} {
 	return c.container
 }
 
+type contextKey string
+
+const httpContextKey contextKey = "http_context"
+
 // WithContext returns a new context with the given context.Context.
 func (c *Context) WithContext(ctx context.Context) context.Context {
-	return context.WithValue(ctx, "http_context", c)
+	return context.WithValue(ctx, httpContextKey, c)
 }
 
 // Next calls the next middleware in the chain.
-func (c *Context) Next() error {
+func (c *Context) Next(ctx *Context) error {
 	c.index++
 	if c.index >= len(c.middleware) {
 		return nil

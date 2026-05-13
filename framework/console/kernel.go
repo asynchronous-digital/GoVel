@@ -1,5 +1,4 @@
 package console
-package console
 
 import (
 	"fmt"

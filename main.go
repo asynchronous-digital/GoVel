@@ -1,14 +1,14 @@
 package main
-package main
 
 import (
 	"log"
-	"net/http"
+	stdhttp "net/http"
 	"os"
 
+	"github.com/hasnat/govel/app/http/controllers"
 	"github.com/hasnat/govel/bootstrap"
 	"github.com/hasnat/govel/framework/console"
-	"github.com/hasnat/govel/framework/http"
+	"github.com/hasnat/govel/framework/routing"
 	"github.com/hasnat/govel/routes"
 )
 
@@ -33,7 +33,7 @@ func main() {
 
 	// Add global middleware
 	router := app.Router()
-	router.NotFound(&http.ErrorHandler{})
+	router.NotFound(&controllers.ErrorHandler{})
 
 	// Add middleware to router
 	setupMiddleware(router)
@@ -44,13 +44,13 @@ func main() {
 
 	app.Logger().Info("Starting server on http://localhost:" + port)
 
-	if err := http.ListenAndServe(addr, router); err != nil && err != http.ErrServerClosed {
+	if err := stdhttp.ListenAndServe(addr, router); err != nil && err != stdhttp.ErrServerClosed {
 		log.Fatalf("Server error: %v", err)
 	}
 }
 
 // setupMiddleware configures middleware for the router.
-func setupMiddleware(router *http.Router) {
+func setupMiddleware(router *routing.Router) {
 	// In a real application, middleware would be applied here
 	// via router.Middleware() or route group middleware
 }
@@ -80,13 +80,15 @@ func registerCommands(kernel *console.Kernel) {
 	kernel.Register(console.ServeCommand(func(port string) error {
 		// Start server logic
 		app := bootstrap.New(".")
-		app.Boot()
+		if err := app.Boot(); err != nil {
+			return err
+		}
 
 		routes.RegisterWebRoutes(app.Router())
 		routes.RegisterAPIRoutes(app.Router())
 
 		addr := ":" + port
-		return http.ListenAndServe(addr, app.Router())
+		return stdhttp.ListenAndServe(addr, app.Router())
 	}))
 
 	kernel.Register(console.MakeControllerCommand())

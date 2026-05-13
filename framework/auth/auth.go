@@ -1,4 +1,3 @@
-package auth
 // Authentication system (Phase 3)
 // Provides multi-guard authentication with user management
 
@@ -12,16 +11,16 @@ import (
 type Guard interface {
 	// User login/authentication
 	Attempt(credentials map[string]interface{}) (User, error)
-	
+
 	// Check if authenticated
 	Check(ctx context.Context) bool
-	
+
 	// Get authenticated user
 	User(ctx context.Context) User
-	
+
 	// Login a specific user
 	Login(user User) error
-	
+
 	// Logout user
 	Logout(ctx context.Context) error
 }

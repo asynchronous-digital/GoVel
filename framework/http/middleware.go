@@ -101,7 +101,7 @@ func LoggingMiddleware(ctx *Context, next Handler) error {
 func RecoveryMiddleware(ctx *Context, next Handler) error {
 	defer func() {
 		if r := recover(); r != nil {
-			ctx.ServerError("Internal Server Error")
+			_ = ctx.ServerError("Internal Server Error")
 		}
 	}()
 	return next(ctx)

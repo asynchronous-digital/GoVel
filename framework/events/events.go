@@ -1,4 +1,3 @@
-package events
 // Events system (Phase 3)
 // Provides event dispatching and listener management
 
@@ -20,16 +19,16 @@ type Listener func(ctx context.Context, event Event) error
 type Dispatcher interface {
 	// Register a listener for an event
 	Listen(eventName string, listener Listener)
-	
+
 	// Dispatch an event
 	Dispatch(ctx context.Context, event Event) error
-	
+
 	// Dispatch multiple events
 	DispatchBatch(ctx context.Context, events ...Event) error
-	
+
 	// Forget listeners for an event
 	Forget(eventName string)
-	
+
 	// Forget all listeners
 	Flush()
 }
