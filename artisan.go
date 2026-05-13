@@ -1,3 +1,6 @@
+//go:build artisan
+// +build artisan
+
 package main
 
 import (

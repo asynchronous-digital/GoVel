@@ -1,13 +1,11 @@
-package database
-# ORM abstraction layer (Phase 2)
-# This package provides a high-level interface to GORM for database operations
-# while keeping the framework database-agnostic
+// ORM abstraction layer (Phase 2)
+// This package provides a high-level interface to GORM for database operations
+// while keeping the framework database-agnostic
 
 package database
 
 import (
 	"context"
-	"gorm.io/gorm"
 )
 
 // DB is the main database interface
@@ -67,18 +65,18 @@ type Relationship interface {
 
 // HasMany relationship
 type HasMany struct {
-	LocalModel  interface{}
+	LocalModel   interface{}
 	RelatedModel interface{}
-	ForeignKey string
-	LocalKey   string
+	ForeignKey   string
+	LocalKey     string
 }
 
 // BelongsTo relationship
 type BelongsTo struct {
 	LocalModel   interface{}
 	RelatedModel interface{}
-	ForeignKey  string
-	OwnerKey    string
+	ForeignKey   string
+	OwnerKey     string
 }
 
 // ManyToMany relationship
@@ -86,8 +84,8 @@ type ManyToMany struct {
 	LocalModel   interface{}
 	RelatedModel interface{}
 	Table        string
-	ForeignKey  string
-	RelatedKey  string
+	ForeignKey   string
+	RelatedKey   string
 }
 
 // Scopes - reusable query conditions

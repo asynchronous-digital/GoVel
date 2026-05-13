@@ -1,5 +1,4 @@
 package support
-package support
 
 import (
 	"os"

@@ -1,5 +1,4 @@
 package logging
-package logging
 
 import (
 	"fmt"
@@ -81,7 +80,7 @@ func (l *Logger) log(level Level, message string, context map[string]interface{}
 	// Write to file if set
 	if l.file != nil {
 		formatted := l.formatEntry(entry)
-		l.file.WriteString(formatted + "\n")
+		_, _ = l.file.WriteString(formatted + "\n")
 	}
 
 	// Write to stdout in debug mode

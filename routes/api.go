@@ -1,5 +1,4 @@
 package routes
-package routes
 
 import (
 	"github.com/hasnat/govel/app/http/controllers"

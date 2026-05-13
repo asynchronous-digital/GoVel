@@ -1,5 +1,4 @@
 package validation
-package validation
 
 import (
 	"context"
@@ -14,11 +13,11 @@ type Errors map[string][]string
 
 // Validator validates data against rules.
 type Validator struct {
-	ctx   context.Context
-	data  interface{}
-	rules map[string]string
+	ctx      context.Context
+	data     interface{}
+	rules    map[string]string
 	data_map map[string]interface{}
-	errors Errors
+	errors   Errors
 }
 
 // New creates a new validator instance.
@@ -160,11 +159,11 @@ func (v *Validator) isNotEmpty(value interface{}) bool {
 
 // isInteger checks if a value is an integer.
 func (v *Validator) isInteger(value interface{}) bool {
-	switch value.(type) {
+	switch value := value.(type) {
 	case int, int32, int64:
 		return true
 	case string:
-		_, err := strconv.ParseInt(value.(string), 10, 64)
+		_, err := strconv.ParseInt(value, 10, 64)
 		return err == nil
 	default:
 		return false
@@ -173,11 +172,11 @@ func (v *Validator) isInteger(value interface{}) bool {
 
 // isNumeric checks if a value is numeric.
 func (v *Validator) isNumeric(value interface{}) bool {
-	switch value.(type) {
+	switch value := value.(type) {
 	case int, int32, int64, float32, float64:
 		return true
 	case string:
-		_, err := strconv.ParseFloat(value.(string), 64)
+		_, err := strconv.ParseFloat(value, 64)
 		return err == nil
 	default:
 		return false
@@ -304,19 +303,19 @@ func (v *Validator) addError(field, message string) {
 // getRuleMessage returns the error message for a rule.
 func (v *Validator) getRuleMessage(rule, param string) string {
 	messages := map[string]string{
-		"required":   "This field is required",
-		"email":      "This field must be a valid email",
-		"string":     "This field must be a string",
-		"integer":    "This field must be an integer",
-		"numeric":    "This field must be numeric",
-		"min":        fmt.Sprintf("This field must be at least %s", param),
-		"max":        fmt.Sprintf("This field must not exceed %s", param),
-		"between":    fmt.Sprintf("This field must be between %s", param),
-		"confirmed":  "This field confirmation does not match",
+		"required":    "This field is required",
+		"email":       "This field must be a valid email",
+		"string":      "This field must be a string",
+		"integer":     "This field must be an integer",
+		"numeric":     "This field must be numeric",
+		"min":         fmt.Sprintf("This field must be at least %s", param),
+		"max":         fmt.Sprintf("This field must not exceed %s", param),
+		"between":     fmt.Sprintf("This field must be between %s", param),
+		"confirmed":   "This field confirmation does not match",
 		"starts_with": fmt.Sprintf("This field must start with %s", param),
-		"ends_with":  fmt.Sprintf("This field must end with %s", param),
-		"url":        "This field must be a valid URL",
-		"regex":      "This field format is invalid",
+		"ends_with":   fmt.Sprintf("This field must end with %s", param),
+		"url":         "This field must be a valid URL",
+		"regex":       "This field format is invalid",
 	}
 
 	if msg, ok := messages[rule]; ok {

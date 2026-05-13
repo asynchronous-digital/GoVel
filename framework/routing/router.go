@@ -1,5 +1,4 @@
 package routing
-package routing
 
 import (
 	"fmt"
@@ -15,7 +14,6 @@ type Router struct {
 	routes          []*Route
 	middlewares     []httpfw.Middleware
 	prefix          string
-	name            string
 	compiled        map[string]*compiledRoute
 	notFoundHandler http.Handler
 }
@@ -25,8 +23,8 @@ type Route struct {
 	Method      string
 	Path        string
 	Handler     http.Handler
-	Name        string
-	Middleware  []httpfw.Middleware
+	RouteName   string
+	Middlewares []httpfw.Middleware
 	pattern     *regexp.Regexp
 	paramNames  []string
 }
@@ -95,10 +93,10 @@ func (r *Router) Add(method, path string, handler http.Handler) *Route {
 	fullPath := r.prefix + path
 
 	route := &Route{
-		Method:     method,
-		Path:       fullPath,
-		Handler:    handler,
-		Middleware: append([]httpfw.Middleware(nil), r.middlewares...),
+		Method:      method,
+		Path:        fullPath,
+		Handler:     handler,
+		Middlewares: append([]httpfw.Middleware(nil), r.middlewares...),
 	}
 
 	r.routes = append(r.routes, route)
@@ -131,13 +129,13 @@ func (r *Router) Group(cb func(r *Router)) {
 
 // Name sets the name of the last registered route.
 func (route *Route) Name(name string) *Route {
-	route.Name = name
+	route.RouteName = name
 	return route
 }
 
 // Middleware adds middleware to a specific route.
 func (route *Route) Middleware(middlewares ...httpfw.Middleware) *Route {
-	route.Middleware = append(route.Middleware, middlewares...)
+	route.Middlewares = append(route.Middlewares, middlewares...)
 	return route
 }
 
@@ -222,7 +220,7 @@ func (r *Router) methodMatches(route *Route, method string) bool {
 
 // ServeHTTP implements http.Handler interface.
 func (r *Router) ServeHTTP(w http.ResponseWriter, req *http.Request) {
-	ctx := http.New(w, req)
+	ctx := httpfw.New(w, req)
 
 	// Match route
 	route, params, err := r.Match(req.Method, req.URL.Path)
@@ -242,9 +240,7 @@ func (r *Router) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// Call handler
-	if handler, ok := route.Handler.(http.Handler); ok {
-		handler.ServeHTTP(w, req)
-	}
+	route.Handler.ServeHTTP(w, req)
 }
 
 // NotFound sets a custom 404 handler.
@@ -263,7 +259,7 @@ type RouterGroup struct {
 func (rg *RouterGroup) Group(cb func(r *Router)) {
 	// Save current state
 	oldPrefix := rg.router.prefix
-	oldMiddlewares := append([]http.Middleware(nil), rg.router.middlewares...)
+	oldMiddlewares := append([]httpfw.Middleware(nil), rg.router.middlewares...)
 
 	// Apply group configuration
 	rg.router.prefix = oldPrefix + rg.prefix
